@@ -1,0 +1,26 @@
+.navbar {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.navbar_brand {
+  color: white;
+}
+
+.dropdown-toggle {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
+.dropdown-menu {
+  left: auto !important;
+  right: 0 !important;
+}
+
+.dropdown-item {
+  cursor: pointer;
+}
+
+.dropdown-toggle::after {
+  color: white !important;
+}

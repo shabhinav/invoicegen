@@ -182,6 +182,7 @@ function InvoiceBasicInfo(props) {
       dispatch(invoicesData(JSON.parse(JSON.stringify(invoiceData))));
       props.history.push("/invoice");
     }
+    console.log(balanceDue);
   };
 
   return (

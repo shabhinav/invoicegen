@@ -1,7 +1,6 @@
 import React from "react";
 import AddIcon from "@material-ui/icons/Add";
 import "./Invoice.scss";
-import { NavLink } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 
 function Invoice(props) {

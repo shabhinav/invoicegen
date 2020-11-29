@@ -409,14 +409,14 @@ function InvoiceBasicInfo(props) {
         </div>
         <div className="py-3">
           <button
-            // disabled={
-            //   !(
-            //     values.senderName &&
-            //     values.senderEmail &&
-            //     values.senderPhone &&
-            //     data.length > 0
-            //   )
-            // }
+            disabled={
+              !(
+                values.senderName &&
+                values.senderEmail &&
+                values.senderPhone &&
+                data.length > 0
+              )
+            }
             className="btn btn-primary"
             onClick={() => addItemHandler("save")}
           >

@@ -9,8 +9,9 @@ import Invoice from "./Component/Invoice";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import InvoiceBasicInfo from "./Component/InvoiceBasicInfo";
 import InvoiceCopy from "./Component/InvoiceCopy";
+import Preview from "./Component/Preview";
 
-function App() {
+function App(props) {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   useEffect(() => {
@@ -41,6 +42,8 @@ function App() {
               <Route path="/" exact>
                 <Invoice />
               </Route>
+              <Route path="/preview" component={Preview} />
+              {/* <Route path="/invoice" component={Invoice} /> */}
               <Route path="/basicInfo">
                 <InvoiceBasicInfo />
               </Route>

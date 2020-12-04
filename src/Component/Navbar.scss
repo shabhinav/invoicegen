@@ -1,15 +1,33 @@
-.navbar {
-  background-color: rgba(0, 0, 0, 0.9);
+.navbar1 {
+  padding: 0px !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  top: 0 !important;
+}
+
+.navbar_left {
+  background-image: url("//www.gstatic.com/mobilesdk/190805_mobilesdk/woman-at-desktop@2x.png");
+  padding-bottom: 350px;
+  background-size: cover;
+  width: 100%;
+  top: 0em;
+}
+
+.navbar_right {
+  background-image: url("//www.gstatic.com/mobilesdk/190805_mobilesdk/man-at-desktop@2x.png");
+  padding-bottom: 350px !important;
+  background-size: cover;
+  width: 100%;
 }
 
 .navbar_brand {
   color: white;
+  top: 0;
 }
 
 .dropdown-toggle {
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
+  content: none !important;
+  padding: 5px;
 }
 
 .dropdown-menu {
@@ -22,5 +40,9 @@
 }
 
 .dropdown-toggle::after {
-  color: white !important;
+  content: none !important;
+}
+
+.MuiAvatar-root {
+  display: inline-block !important;
 }

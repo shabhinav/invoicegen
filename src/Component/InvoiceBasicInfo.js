@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./InvoiceBasicInfo.scss";
 import TextField from "@material-ui/core/TextField";
 import AddIcon from "@material-ui/icons/Add";
 import { invoicesData } from "../features/invoiceSlice";
 import { useDispatch } from "react-redux";
 import { withRouter } from "react-router-dom";
+import { navbar } from "../features/navbarSlice";
 
 const InputFields = [
   {
@@ -36,6 +37,7 @@ let quantity = 1;
 
 function InvoiceBasicInfo(props) {
   const dispatch = useDispatch();
+  const navDispatch = useDispatch();
   const [values, setValues] = useState({
     senderName: "",
     senderEmail: "",
@@ -62,6 +64,10 @@ function InvoiceBasicInfo(props) {
   const [subTotal, setSubTotal] = useState(0);
   const [balanceDue, setBalanceDue] = useState(0);
   const [amtPaid, setAmtPaid] = useState(0);
+
+  useEffect(() => {
+    navDispatch(navbar(false));
+  });
 
   const onchangeHandler = (e, type) => {
     if (
@@ -187,242 +193,258 @@ function InvoiceBasicInfo(props) {
 
   return (
     <div className="invoicebasicinfo ">
-      <div className="userInfopage shadow-lg container">
+      <div className="userInfopage shadow-lg ">
         <div className="invoiceheading container">
-          <h2>
-            <strong>Invoice</strong>
+          <h2
+            className="ml-2"
+            style={{
+              display: "inline",
+              fontSize: "40px",
+            }}
+          >
+            Invoice
           </h2>
         </div>
-        <div className="invoiceDetails mb-4">
-          <span>
-            <strong>From</strong>
-          </span>
-          <span className="ml-3">
-            <strong>Bill To</strong>
-          </span>
-        </div>
-        <div className="row">
-          <div className="col-md-6">
-            {InputFields.map((data, index) => (
-              <div key={index} className="row mt-2">
-                <div className="col-md-3 pr-0 inputlabels">
-                  <label>{data.label}</label>
-                </div>
-                <div className="col-md-9 pl-0 inputbox">
-                  <input
-                    type={data.type}
-                    className="form-control"
-                    placeholder={data.placeholder}
-                    onChange={(e) => onchangeHandler(e, `sender${data.label}`)}
-                  />
-                </div>
-              </div>
-            ))}
+        <div className="container">
+          <div className="invoiceDetails mb-4">
+            <span>
+              <strong>From</strong>
+            </span>
+            <span className="ml-3">
+              <strong>Bill To</strong>
+            </span>
           </div>
-          <div
-            className="col-md-6 "
-            style={{ borderLeft: "1px solid lightgrey" }}
-          >
-            {InputFields.map((data, index) => (
-              <div key={index} className="row mt-2">
-                <div className="col-md-3 pr-0 inputlabels">
-                  <label>{data.label}</label>
-                </div>
-                <div className="col-md-9 pl-0 inputbox">
-                  <input
-                    type={data.type}
-                    className="form-control"
-                    placeholder={data.placeholder}
-                    onChange={(e) => onchangeHandler(e, `rec${data.label}`)}
-                  />
-                </div>
-              </div>
-            ))}
-            <div className="row mt-3">
-              <div className="col-md-3 pr-0 inputlabels">
-                <label>Date</label>
-              </div>
-              <div className="col-md-9 pl-0 inputbox">
-                <TextField
-                  id="date"
-                  type="date"
-                  defaultValue="yyyy-mm-dd"
-                  className="datepicker"
-                  onChange={(e) => onchangeHandler(e, "date")}
-                />
-              </div>
-              <div className="col-md-3 mt-3 pr-0 inputlabels">
-                <label>Due Date</label>
-              </div>
-              <div className="col-md-9 mt-3 pl-0 inputbox">
-                <TextField
-                  id="duedate"
-                  type="date"
-                  defaultValue="yyyy-mm-dd"
-                  className="datepicker"
-                  onChange={(e) => onchangeHandler(e, "dueDate")}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* <hr className="mt-5" /> */}
-        <div className="invoice_items mt-5">
-          <div className="invoiceitems_heading">
-            <div className="pl-2">
-              <span>Sno.</span>
-            </div>
-            <div>
-              <span>Items</span>
-            </div>
-            <div>
-              <span>Quantity</span>
-            </div>
-            <div>
-              <span>Unit Price</span>
-            </div>
-            <div>
-              <span>Discount</span>
-            </div>
-            <div>
-              <span>Tax</span>
-            </div>
-            <div>
-              <span>Amount</span>
-            </div>
-          </div>
-          <div className="mt-3">
-            {data.map((data, index) => (
-              <div key={index} className="invoiceitem mt-2">
-                <div>
-                  <span>{index + 1}.</span>
-                </div>
-                <div>
-                  <div>
+          <div className="row">
+            <div className="col-md-6">
+              {InputFields.map((data, index) => (
+                <div key={index} className="row mt-2">
+                  <div className="col-md-3 pr-0 inputlabels">
+                    <label>{data.label}</label>
+                  </div>
+                  <div className="col-md-9 pl-0 inputbox">
                     <input
-                      type="text"
+                      type={data.type}
                       className="form-control"
-                      placeholder="Item Name"
-                      onChange={(e) => onchangeHandler(e, "itemName")}
+                      placeholder={data.placeholder}
+                      onChange={(e) =>
+                        onchangeHandler(e, `sender${data.label}`)
+                      }
                     />
                   </div>
-                  <div className="mt-1">
-                    <textarea
-                      className="form-control"
-                      placeholder="Product Description ...."
-                      rows="2"
-                      onChange={(e) => onchangeHandler(e, "itemDesc")}
-                    ></textarea>
-                  </div>
                 </div>
-                <div>
-                  <input
-                    type="number"
-                    className="form-control"
-                    placeholder="Quan"
-                    onChange={(e) => onchangeHandler(e, "quantity")}
-                  />
-                </div>
-                <div>
-                  <input
-                    type="number"
-                    className="form-control"
-                    placeholder="U.P"
-                    onChange={(e) => onchangeHandler(e, "unitPrice")}
-                  />
-                </div>
-                <div>
-                  <input
-                    type="number"
-                    className="form-control"
-                    placeholder="Dis %"
-                    onChange={(e) => onchangeHandler(e, "discount")}
-                  />
-                </div>
-                <div>
-                  <input
-                    type="number"
-                    className="form-control"
-                    placeholder="Tax %"
-                    onChange={(e) => onchangeHandler(e, "tax")}
-                  />
-                </div>
-                <div style={{ textAlign: "left" }}>
-                  <span style={{ fontSize: "14px" }} className="mt-5">
-                    ₹{amtColl[index] ? Math.round(amtColl[index]) : null}
-                  </span>
-                </div>
-                <div className="remove_btn">
-                  <span>X</span>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="addnewItem mt-2">
-            <button
-              className="btn btn-primary"
-              disabled={
-                !(values.itemName && values.quantity && values.unitPrice)
-              }
-              onClick={addItemHandler}
+              ))}
+            </div>
+            <div
+              className="col-md-6 "
+              style={{ borderLeft: "1px solid lightgrey" }}
             >
-              <AddIcon />
-              Add new Item
-            </button>
-
-            <div className="invoice_footer mt-5">
-              <div className="invoice_note">
-                <p className="m-0">Notes</p>
-                <textarea
-                  className="form-control"
-                  placeholder="Any relvenat Info Not covered"
-                  // placeholder="Product Description ...."
-                  rows="2"
-                ></textarea>
-              </div>
-              <div className="invoice_calc container">
-                <div className="ml-5 container">
-                  <p className="mb-2">SubTotal ₹ {Math.round(subTotal)}</p>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <span className="mr-4">Amount Paid:</span>
-                    <span style={{ width: "30%" }}>
-                      <input
-                        onChange={(e) => onchangeHandler(e, "amountPaid")}
-                        // className="amount_paid"
-                        type="number"
-                        className="form-control"
-                      />
-                    </span>
+              {InputFields.map((data, index) => (
+                <div key={index} className="row mt-2">
+                  <div className="col-md-3 pr-0 inputlabels">
+                    <label>{data.label}</label>
                   </div>
-                  <p className="mt-2">
-                    {/* {balanceDue} */}
-                    Balance Due: ₹ {Math.round(subTotal - amtPaid)}
-                  </p>
+                  <div className="col-md-9 pl-0 inputbox">
+                    <input
+                      type={data.type}
+                      className="form-control"
+                      placeholder={data.placeholder}
+                      onChange={(e) => onchangeHandler(e, `rec${data.label}`)}
+                    />
+                  </div>
+                </div>
+              ))}
+              <div className="row mt-3">
+                <div className="col-md-3 pr-0 inputlabels">
+                  <label>Date</label>
+                </div>
+                <div className="col-md-9 pl-0 inputbox">
+                  <TextField
+                    id="date"
+                    type="date"
+                    defaultValue="yyyy-mm-dd"
+                    className="datepicker"
+                    onChange={(e) => onchangeHandler(e, "date")}
+                  />
+                </div>
+                <div className="col-md-3 mt-3 pr-0 inputlabels">
+                  <label>Due Date</label>
+                </div>
+                <div className="col-md-9 mt-3 pl-0 inputbox">
+                  <TextField
+                    id="duedate"
+                    type="date"
+                    defaultValue="yyyy-mm-dd"
+                    className="datepicker"
+                    onChange={(e) => onchangeHandler(e, "dueDate")}
+                  />
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="py-3">
-          <button
-            disabled={
-              !(
-                values.senderName &&
-                values.senderEmail &&
-                values.senderPhone &&
-                data.length > 0
-              )
-            }
-            className="btn btn-primary"
-            onClick={() => addItemHandler("save")}
-          >
-            Save
-          </button>
+          {/* <hr className="mt-5" /> */}
+          <div className="invoice_items mt-5">
+            <div className="invoiceitems_heading">
+              <div className="pl-2">
+                <span>Sno.</span>
+              </div>
+              <div>
+                <span>Items</span>
+              </div>
+              <div>
+                <span>Quantity</span>
+              </div>
+              <div>
+                <span>Unit Price</span>
+              </div>
+              <div>
+                <span>Discount</span>
+              </div>
+              <div>
+                <span>Tax</span>
+              </div>
+              <div>
+                <span>Amount</span>
+              </div>
+            </div>
+            <div className="mt-3">
+              {data.map((data, index) => (
+                <div key={index} className="invoiceitem mt-2">
+                  <div>
+                    <span>{index + 1}.</span>
+                  </div>
+                  <div>
+                    <div>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Item Name"
+                        onChange={(e) => onchangeHandler(e, "itemName")}
+                      />
+                    </div>
+                    <div className="mt-1">
+                      <textarea
+                        className="form-control"
+                        placeholder="Product Description ...."
+                        rows="2"
+                        onChange={(e) => onchangeHandler(e, "itemDesc")}
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div>
+                    <input
+                      type="number"
+                      className="form-control"
+                      placeholder="Quan"
+                      onChange={(e) => onchangeHandler(e, "quantity")}
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="number"
+                      className="form-control"
+                      placeholder="U.P"
+                      onChange={(e) => onchangeHandler(e, "unitPrice")}
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="number"
+                      className="form-control"
+                      placeholder="Dis %"
+                      onChange={(e) => onchangeHandler(e, "discount")}
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="number"
+                      className="form-control"
+                      placeholder="Tax %"
+                      onChange={(e) => onchangeHandler(e, "tax")}
+                    />
+                  </div>
+                  <div style={{ textAlign: "left" }}>
+                    <span style={{ fontSize: "14px" }} className="mt-5">
+                      ₹{amtColl[index] ? Math.round(amtColl[index]) : null}
+                    </span>
+                  </div>
+                  <div className="remove_btn">
+                    <span>X</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="addnewItem mt-2">
+              <button
+                className="btn btn-primary"
+                disabled={
+                  !(values.itemName && values.quantity && values.unitPrice)
+                }
+                onClick={addItemHandler}
+              >
+                <AddIcon />
+                Add new Item
+              </button>
+
+              <div className="invoice_footer mt-5">
+                <div className="invoice_note">
+                  <p className="m-0">Notes</p>
+                  <textarea
+                    className="form-control"
+                    placeholder="Any relvenat Info Not covered"
+                    // placeholder="Product Description ...."
+                    rows="2"
+                  ></textarea>
+                </div>
+                <div className="invoice_calc container">
+                  <div className="ml-5">
+                    <p className="mb-2 ml-5">
+                      <strong>SubTotal</strong> ₹ {Math.round(subTotal)}
+                    </p>
+                    <div
+                      className="ml-5"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <span className="mr-4">
+                        <strong>Amount Paid:</strong>
+                      </span>
+                      <span style={{ width: "30%" }}>
+                        <input
+                          onChange={(e) => onchangeHandler(e, "amountPaid")}
+                          // className="amount_paid"
+                          type="number"
+                          className="form-control"
+                        />
+                      </span>
+                    </div>
+                    <p className="mt-2 ml-5">
+                      {/* {balanceDue} */}
+                      <strong>Balance Due:</strong> ₹{" "}
+                      {Math.round(subTotal - amtPaid)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="py-3">
+            <button
+              disabled={
+                !(
+                  values.senderName &&
+                  values.senderEmail &&
+                  values.senderPhone &&
+                  data.length > 0
+                )
+              }
+              className="btn btn-primary"
+              onClick={() => addItemHandler("save")}
+            >
+              Save
+            </button>
+          </div>
         </div>
       </div>
     </div>

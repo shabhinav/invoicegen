@@ -14,16 +14,20 @@
 .userInfopage {
   width: 60% !important;
   height: 100%;
+  border-radius: 5px;
+  border-top: 5px solid black;
 }
 
 .invoiceheading {
   text-align: left;
   font-weight: bolder;
-  margin-top: 20px;
+  padding: 25px 0px 0px;
+  margin-left: 50px !important;
+  font-weight: 100;
 }
 
 .invoiceDetails {
-  margin-top: 40px;
+  margin-top: 20px;
   text-align: left;
   display: flex;
   span {

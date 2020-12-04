@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./Login.scss";
+import { withRouter } from "react-router-dom";
 import { TextField } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import FilledInput from "@material-ui/core/FilledInput";
@@ -9,27 +10,31 @@ import FormControl from "@material-ui/core/FormControl";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { auth, provider } from "../firebase";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
-export default function Login() {
+const Login = (props) => {
   const [values, setValues] = useState({
     email: "",
     password: "",
     signIn: true,
     showPassword: false,
   });
+  const [error, setError] = useState("");
 
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
   };
 
   const onchangeHandler = (e, type) => {
+    setError("");
     setValues({ ...values, [type]: e.target.value });
   };
 
   const signInHandler = () => {
     auth
       .signInWithEmailAndPassword(values.email, values.password)
-      .catch((error) => alert(error.message));
+      .then(() => props.history.push("/"))
+      .catch((error) => setError(error.message));
 
     setValues({ ...values, password: "", email: "" });
   };
@@ -37,8 +42,8 @@ export default function Login() {
   const SignUpHandler = () => {
     auth
       .createUserWithEmailAndPassword(values.email, values.password)
-      .then((authUser) => console.log(authUser))
-      .catch((error) => alert(error.message));
+      .then(props.history.push("/"))
+      .catch((error) => setError(error.message));
     setValues({ ...values, password: "", email: "" });
   };
 
@@ -47,19 +52,21 @@ export default function Login() {
   };
 
   const loginWithGoogle = () => {
-    auth.signInWithPopup(provider).catch((error) => alert(error.message));
+    auth
+      .signInWithPopup(provider)
+      .then(() => props.history.push("/"))
+      .catch((error) => console.log(error.message));
   };
 
   return (
     <div className="login">
       <div className="loginpage_conatainer">
-        <div className="loginpage_heading">
-          <h2>
-            <strong>{values.signIn ? "Sign In" : "Sign Up"}</strong>
-          </h2>
+        <div>
+          <AccountCircleIcon className="login_img" />
         </div>
         <div>
           <TextField
+            style={{ color: "white" }}
             className="outlined-basic"
             value={values.email}
             type="email"
@@ -74,6 +81,7 @@ export default function Login() {
               Password
             </InputLabel>
             <FilledInput
+              // style={{ color: "white" }}
               className="outlined-basic"
               id="filled-adornment-password"
               value={values.password}
@@ -93,6 +101,7 @@ export default function Login() {
             />
           </FormControl>
         </div>
+        <span style={{ color: "#dc3545", fontSize: "10px" }}>{error}</span>
         <div className="login_button ">
           <button
             className="btn btn-primary"
@@ -100,20 +109,34 @@ export default function Login() {
           >
             {values.signIn ? "Sign In" : "Sign Up"}
           </button>
-          <hr style={{ backgroundColor: "white" }} />
-          <button className="btn btn-danger" onClick={loginWithGoogle}>
-            <strong>{values.signIn ? "SignIn" : "SignUp"} with Google</strong>
+          <h6 className="login_option">
+            <span className="px-2">or</span>
+          </h6>
+          <button className="btn btn-outline-danger" onClick={loginWithGoogle}>
+            <img
+              style={{ wifth: "20px", height: "20px", marginRight: "10px" }}
+              src="https://img.icons8.com/fluent/2x/google-logo.png"
+              alt=""
+            />
+            <strong>Login with Google</strong>
           </button>
         </div>
         <div className="login_type">
-          <p>
-            {values.signIn ? "New User? " : "Existing User? "}
-            <span onClick={changeLoginTypeHandler}>
-              {values.signIn ? "Sign Up now" : "Sign In now"}
+          <p style={{ fontSize: "15px", color: "white" }}>
+            {values.signIn
+              ? "Don't have a account? "
+              : "Already have an account? "}
+            <span
+              style={{ color: "lightgrey" }}
+              onClick={changeLoginTypeHandler}
+            >
+              {values.signIn ? "Sign Up" : "Sign In "}
             </span>
           </p>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default withRouter(Login);

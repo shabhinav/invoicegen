@@ -1,6 +1,8 @@
 .invoiceCopy_container {
   width: 60%;
   margin: auto;
+  height: 100vh;
+  border-top: 5px solid black;
 }
 
 .invoiceCopy_header {
@@ -18,9 +20,13 @@
   text-align: right !important;
   p {
     padding-right: 15px;
+    span {
+      text-align: left;
+    }
   }
 }
 
-.download {
-  margin-left: 50%;
+.preview {
+  margin-left: 40%;
+  margin-right: 5px;
 }

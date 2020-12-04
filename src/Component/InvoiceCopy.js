@@ -1,15 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { selectInvoice } from "../features/invoiceSlice";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import "./InvoiceCopy.scss";
 import Pdf from "react-to-pdf";
+import AddIcon from "@material-ui/icons/Add";
+import { withRouter } from "react-router-dom";
+import db from "../firebase";
+import { navbar } from "../features/navbarSlice";
 
 const ref = React.createRef();
 
-function InvoiceCopy() {
+function InvoiceCopy(props) {
   const invoice = useSelector(selectInvoice);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    db.collection("invoices").add({
+      invoice,
+    });
+  }, [invoice]);
+
+  const createInvoiceHandler = () => {
+    props.history.push("/");
+    dispatch(navbar(true));
+  };
+
   return (
     <div className="invoiceCopy">
+      <button
+        className="btn btn-primary preview my-1"
+        onClick={createInvoiceHandler}
+      >
+        <AddIcon />
+        Create New
+      </button>
       <Pdf targetRef={ref} filename="invoice.pdf">
         {({ toPdf }) => (
           <button className="btn btn-primary download" onClick={toPdf}>
@@ -20,44 +43,31 @@ function InvoiceCopy() {
       <div ref={ref} className="invoiceCopy_container shadow-lg ">
         <div className="invoiceCopy_header container  ">
           <div style={{ textAlign: "left" }} className="pt-3">
-            <p>
+            <p style={{ textTransform: "capitalize" }}>
               <strong>{invoice[0].senderName}</strong>
             </p>
             <p>{invoice[0].senderEmail}</p>
-            <p>
-              <strong>Address: </strong>
-              {invoice[0].senderAddress}
-            </p>
-            <p>
-              <strong>Phone no.: </strong>
-              {invoice[0].senderPhone}
-            </p>
+            <p>{invoice[0].senderAddress}</p>
+            <p>{invoice[0].senderPhone}</p>
           </div>
           <div style={{ textAlign: "right" }} className="pt-3">
-            <p>
+            <p style={{ textTransform: "capitalize" }}>
               <strong>{invoice[0].recName}</strong>
             </p>
             <p>{invoice[0].recEmail}</p>
+            <p>{invoice[0].recAddress}</p>
+            <p>{invoice[0].recPhone}</p>
             <p>
-              {invoice[0].recAddress}
-              <strong> :Address</strong>
-            </p>
-            <p>
-              {invoice[0].recPhone}
-              <strong> :Phone no.</strong>
-            </p>
-            <p>
+              <strong>Date : </strong>
               {invoice[0].date}
-              <strong> :Date</strong>
             </p>
             <p>
-              {invoice[0].dueDate}
-              <strong> :DueDate</strong>
+              <strong>DueDate :</strong> {invoice[0].dueDate}
             </p>
           </div>
         </div>
         <div>
-          <table className="table container mt-5">
+          <table className=" table  container mt-5 mb-0">
             <thead>
               <th>S.no</th>
               <th>Items</th>
@@ -69,7 +79,7 @@ function InvoiceCopy() {
             </thead>
             <tbody>
               {invoice.map((data, index) => (
-                <tr>
+                <tr key={index} style={{ borderBottom: "1px solid lightgrey" }}>
                   <td>{index + 1}</td>
                   <td>
                     <p>{data.itemName}</p>
@@ -86,20 +96,43 @@ function InvoiceCopy() {
           </table>
         </div>
         <div className="row">
-          <div
-            style={{ textALign: "right" }}
-            className="col-md-6 offset-md-6 mt-5 invoice_total"
-          >
-            <p>
-              <strong>Sub Total: </strong>
-              {Math.round(invoice[0].subTotal)}
-            </p>
-            <p>
-              <strong>Amount Paid</strong> {invoice[0].amountPaid}
-            </p>
-            <p>
-              <strong>Balance Due</strong> {invoice[0].balanceDue}
-            </p>
+          <div className="col-md-8 offset-md-4  invoice_total row">
+            <div style={{ textALign: "left" }} className="col-md-8 offset-md-4">
+              <p
+                className="row py-2"
+                style={{ borderBottom: "1px solid lightgrey" }}
+              >
+                <span className="col-md-7 ">
+                  <strong>Sub Total: </strong>
+                </span>
+                <span style={{ textAlign: "right" }} className="col-md-5">
+                  ₹ {Math.round(invoice[0].subTotal)}
+                </span>
+              </p>
+              <p
+                className="row py-2"
+                style={{ borderBottom: "1px solid lightgrey" }}
+              >
+                <span className="col-md-8">
+                  <strong>Amount Paid: </strong>
+                </span>
+                <span style={{ textAlign: "right" }} className="col-md-4">
+                  ₹ {invoice[0].amountPaid}
+                </span>
+              </p>
+              <p
+                className="row py-2"
+                style={{ borderBottom: "1px dashed lightgrey" }}
+              >
+                <span className="col-md-7">
+                  <strong>Balance Due: </strong>
+                </span>
+                <span style={{ textAlign: "right" }} className="col-md-5">
+                  {" "}
+                  ₹ {invoice[0].balanceDue}
+                </span>
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -107,4 +140,4 @@ function InvoiceCopy() {
   );
 }
 
-export default InvoiceCopy;
+export default withRouter(InvoiceCopy);

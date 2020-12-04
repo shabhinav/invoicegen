@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Avatar } from "@material-ui/core";
 import { selectUser } from "../features/userSlice";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import "./Navbar.scss";
 import { auth } from "../firebase";
 import { withRouter } from "react-router-dom";
